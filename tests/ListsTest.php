@@ -30,34 +30,34 @@ use function Php\Pairs\Data\Lists\random;
 
 class ListsTest extends TestCase
 {
-    public function testL()
+    public function testL(): void
     {
         $this->assertEquals(toString(l()), toString(l()));
         $list = cons(1, cons((cons(3, cons(4, null))), cons(5, null)));
         $this->assertEquals(toString($list), toString(l(1, l(3, 4), 5)));
     }
 
-    public function testHead()
+    public function testHead(): void
     {
         $this->assertEquals(3, head(l(3, 4, 5)));
         $this->expectExceptionMessage("Argument must be list, but it was '5'");
         head(5);
     }
 
-    public function testTail()
+    public function testTail(): void
     {
         $this->assertEquals('(4, 5)', toString(tail(l(3, 4, 5))));
         $this->expectExceptionMessage("Argument must be list, but it was 'array'");
         tail([]);
     }
 
-    public function testIsEmpty()
+    public function testIsEmpty(): void
     {
         $this->assertTrue(isEmpty(l()));
         $this->assertFalse(isEmpty(l(0)));
     }
 
-    public function testIsEqual()
+    public function testIsEqual(): void
     {
         $numbers = l(3, 4, 5, 8);
         $numbers2 = l(3, 4, 5, 8);
@@ -67,7 +67,7 @@ class ListsTest extends TestCase
         $this->assertFalse(isEqual($numbers2, $numbers3));
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $numbers = l(3, 4, 5, 8);
 
@@ -77,7 +77,7 @@ class ListsTest extends TestCase
         $this->assertFalse(has($numbers, 7));
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $list = l(2, 3, 4);
         $expected = toString(l(2, 4));
@@ -92,13 +92,16 @@ class ListsTest extends TestCase
         $this->assertEquals($expected, toString($filtered));
     }
 
-    public function testS()
+    public function testS(): void
     {
         $numbers = s(3, 4, 3, 5, 5);
         $this->assertEquals('(4, 3, 5)', toString($numbers));
+
+        $empty = s();
+        $this->assertEquals('()', toString($empty));
     }
 
-    public function testConj()
+    public function testConj(): void
     {
         $numbers = s(3, 4, 3, 5, 5);
         $numbers2 = conj($numbers, 0);
@@ -107,7 +110,7 @@ class ListsTest extends TestCase
         $this->assertTrue(has($numbers2, 0));
     }
 
-    public function testDisj()
+    public function testDisj(): void
     {
         $numbers = s(3, 4, 3, 5, 5);
         $numbers2 = disj($numbers, 4);
@@ -116,7 +119,7 @@ class ListsTest extends TestCase
         $this->assertFalse(has($numbers2, 4));
     }
 
-    public function testIsList()
+    public function testIsList(): void
     {
         $numbers = l(3, 4, 5);
         $this->assertTrue(isList($numbers));
@@ -125,13 +128,13 @@ class ListsTest extends TestCase
         $this->assertFalse(isList(5));
     }
 
-    public function testCheckList()
+    public function testCheckList(): void
     {
         $this->expectExceptionMessage("Argument must be list, but it was 'pair: (1, (2, 3))'");
         checkList(pairsCons(1, pairsCons(2, 3)));
     }
 
-    public function testConcat()
+    public function testConcat(): void
     {
         $numbers = l(3, 4, 5, 8);
         $numbers2 = l(3, 2, 9);
@@ -141,14 +144,14 @@ class ListsTest extends TestCase
         $this->assertEquals('(1, 10)', toString(concat(l(1, 10), l())));
     }
 
-    public function testLength()
+    public function testLength(): void
     {
         $this->assertEquals(0, length(l()));
         $list = l(1, 2, 3);
         $this->assertEquals(3, length($list));
     }
 
-    public function testReverse()
+    public function testReverse(): void
     {
         $this->assertEquals(toString(l()), toString(reverse(l())));
 
@@ -157,7 +160,7 @@ class ListsTest extends TestCase
         $this->assertEquals($expected, toString(reverse($list)));
     }
 
-    public function testMap()
+    public function testMap(): void
     {
         $list = l(1, 2, 3);
         $expected = toString(l(3, 4, 5));
@@ -169,7 +172,7 @@ class ListsTest extends TestCase
         $this->assertEquals(toString(l()), toString($map));
     }
 
-    public function testReduce()
+    public function testReduce(): void
     {
         $list = l(1, 2, 3);
         $expected = 6;
@@ -183,7 +186,7 @@ class ListsTest extends TestCase
     }
 
 
-    public function testRandom()
+    public function testRandom(): void
     {
         $numbers = l(3, 4, 3, 5, 5);
         $randomNumber = random($numbers);
@@ -191,7 +194,7 @@ class ListsTest extends TestCase
         $this->assertEquals(3, random(l(3)));
     }
 
-    public function testToString()
+    public function testToString(): void
     {
         $this->assertEquals('()', toString(l()));
 

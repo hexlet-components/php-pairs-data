@@ -2,6 +2,8 @@
 
 namespace Php\Pairs\Data\Lists;
 
+use Closure;
+
 use function Php\Pairs\Pairs\cons as pairsCons;
 use function Php\Pairs\Pairs\car;
 use function Php\Pairs\Pairs\cdr;
@@ -16,7 +18,7 @@ use function Php\Pairs\Pairs\isPair;
  * isList(false); // false
  * isList('hello'); // false
  */
-function isList($mix)
+function isList(mixed $mix): bool
 {
     if ($mix === null) {
         return true;
@@ -29,7 +31,12 @@ function isList($mix)
     return false;
 }
 
-function checkList($list)
+/**
+ * @param mixed $list
+ * @return void
+ * @throws \Exception
+ */
+function checkList(mixed $list): void
 {
     if (!isList($list)) {
         if (isPair($list)) {
@@ -47,9 +54,9 @@ function checkList($list)
 /**
  * Creates new list with given $elements
  * @param mixed[] $elements elements to add
- * @return callable list
+ * @return Closure list
  */
-function l(...$elements)
+function l(...$elements): ?Closure
 {
     return array_reduce(array_reverse($elements), fn($acc, $item) => cons($item, $acc));
 }
@@ -59,7 +66,7 @@ function l(...$elements)
  * @example
  * cons(5, l(1, 0)); // (5, 1, 0)
  */
-function cons($element, $list)
+function cons($element, $list): Closure
 {
     checkList($list);
     return pairsCons($element, $list);
@@ -67,12 +74,12 @@ function cons($element, $list)
 
 /**
  * Get list's head
- * @param callable $list
+ * @param Closure $list
  * @return mixed
  * @example
  * head(l(10, 15, 20)); // 10
  */
-function head($list)
+function head($list): mixed
 {
     checkList($list);
     return car($list);
@@ -80,11 +87,11 @@ function head($list)
 
 /**
  * Get list's tail
- * @param callable $list
+ * @param Closure $list
  * @example
  * tail(l(10, 15, 20)); // (15, 20)
  */
-function tail($list)
+function tail($list): mixed
 {
     checkList($list);
     return cdr($list);
@@ -97,7 +104,7 @@ function tail($list)
  * isEmpty(l(0)); // false
  * isEmpty(l('a', 5)); // false
  */
-function isEmpty($list)
+function isEmpty($list): bool
 {
     checkList($list);
     return $list === null;
@@ -110,7 +117,7 @@ function isEmpty($list)
  * isEqual(l(), l(8, 3)); // false
  * isEqual(l(1, 2, 10), l(1, 2, 10)); // true
  */
-function isEqual($list1, $list2)
+function isEqual($list1, $list2): bool
 {
     checkList($list1);
     checkList($list2);
@@ -134,7 +141,7 @@ function isEqual($list1, $list2)
  * has(numbers, 0); // false
  * has(numbers, 'wow'); // false
  */
-function has($list, $element)
+function has($list, $element): bool
 {
     checkList($list);
     if (isEmpty($list)) {
@@ -149,10 +156,10 @@ function has($list, $element)
 
 /**
  * Reverse list $list
- * @param  callable $list list
- * @return callable result
+ * @param  Closure $list list
+ * @return Closure result
  */
-function reverse($list)
+function reverse($list): ?Closure
 {
     $iter = function ($items, $acc) use (&$iter) {
         return isEmpty($items) ? $acc : $iter(tail($items), cons(head($items), $acc));
@@ -162,12 +169,12 @@ function reverse($list)
 }
 
 /**
- * Filters list $list using callable function $func
- * @param  callable $list list
- * @param  callable $func function
- * @return callable list
+ * Filters list $list using Closure function $func
+ * @param  Closure $list list
+ * @param  Closure $func function
+ * @return Closure list
  */
-function filter($list, callable $func)
+function filter(mixed $list, Closure $func): ?Closure
 {
     if (isEmpty($list)) {
         return l();
@@ -187,7 +194,7 @@ function filter($list, callable $func)
  * $numbers = s(3, 4, 3, 5, 5);
  * toString($numbers) // '(4, 3, 5)'
  */
-function s(...$elements)
+function s(...$elements): ?Closure
 {
     $reversed = array_reverse($elements);
     return array_reduce($reversed, fn($acc, $item) => (has($acc, $item) ? $acc : conj($acc, $item)), l());
@@ -200,7 +207,7 @@ function s(...$elements)
  * conj($numbers, 5); // (3, 4, 5, 8)
  * conj($numbers, 9); // (9, 3, 4, 5, 8)
  */
-function conj($list, $element)
+function conj(mixed $list, $element): ?Closure
 {
     return has($list, $element) ? $list : cons($element, $list);
 }
@@ -211,19 +218,19 @@ function conj($list, $element)
  * $numbers = l(5, 4, 5, 8);
  * disj($numbers, 5); // (4, 8)
  */
-function disj($list, $element)
+function disj($list, $element): ?Closure
 {
     return filter($list, fn($e) => $e !== $element);
 }
 
 
 /**
- * Applies callable function $func to list $list
- * @param callable $list list
- * @param callable $func function
- * @return callable list
+ * Applies Closure function $func to list $list
+ * @param Closure $list list
+ * @param Closure $func function
+ * @return Closure list
  */
-function map($list, callable $func)
+function map(mixed $list, Closure $func): ?Closure
 {
     checkList($list);
     if (isEmpty($list)) {
@@ -236,13 +243,13 @@ function map($list, callable $func)
 }
 
 /**
- * Collapses the list $list using callable function $func
- * @param  callable $list list
- * @param  callable $func function
+ * Collapses the list $list using Closure function $func
+ * @param  Closure $list list
+ * @param  Closure $func function
  * @param  mixed   $acc
  * @return mixed
  */
-function reduce($list, callable $func, $acc = null)
+function reduce(mixed $list, Closure $func, $acc = null): mixed
 {
     $iter = function ($items, $acc) use (&$iter, $func) {
         return isEmpty($items) ? $acc : $iter(tail($items), $func(head($items), $acc));
@@ -260,7 +267,7 @@ function reduce($list, callable $func, $acc = null)
  * concat(l(), l(1, 10)); (1, 10)
  * concat(l(1, 10), l()); // (1, 10)
  */
-function concat($list1, $list2)
+function concat(mixed $list1, mixed $list2): ?Closure
 {
     checkList($list1);
     checkList($list2);
@@ -273,10 +280,10 @@ function concat($list1, $list2)
 
 /**
  * Returns length of list
- * @param  callable $list list
+ * @param  Closure $list list
  * @return integer
  */
-function length($list)
+function length(mixed $list): int
 {
     checkList($list);
     if (isEmpty($list) || !isList($list)) {
@@ -294,7 +301,7 @@ function length($list)
  * get(1, $numbers); // 4
  * get(3, $numbers); // 8
  */
-function get(int $index, $list)
+function get(int $index, mixed $list): mixed
 {
     checkList($list);
     if ($index === 0) {
@@ -310,7 +317,7 @@ function get(int $index, $list)
  * $numbers = l(3, 4, 5, 8);
  * random($numbers); // one random item from 3, 4, 5, 8
  */
-function random($list)
+function random(mixed $list): mixed
 {
     checkList($list);
     $n = rand(0, length($list) - 1);
@@ -324,7 +331,7 @@ function random($list)
  * @param callalble $list
  * @return string
  */
-function toString($list)
+function toString(mixed $list): string
 {
     if (!isList($list)) {
         if (isPair($list)) {
@@ -338,15 +345,15 @@ function toString($list)
         return '()';
     }
 
-    $rec = function ($p) use (&$rec) {
+    $iter = function ($p) use (&$iter) {
         $first = head($p);
         $rest = tail($p);
         if (isEmpty($rest)) {
             return toString($first);
         }
 
-        return toString($first) . ', ' . $rec($rest);
+        return toString($first) . ', ' . $iter($rest);
     };
 
-    return '(' . $rec($list) . ')';
+    return '(' . $iter($list) . ')';
 }
