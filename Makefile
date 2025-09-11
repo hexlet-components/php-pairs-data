@@ -2,7 +2,10 @@ install:
 	composer install
 
 test:
-	composer phpunit tests
+	composer exec phpunit -- tests
 
 lint:
-	composer phpcs src tests
+	composer exec phpcs -- src tests --colors --standard=PSR12
+
+lint-fix:
+	composer exec phpcbf -- src tests --colors --standard=PSR12
