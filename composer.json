@@ -13,7 +13,7 @@
     ],
     "require": {
         "php": ">=8.5",
-        "hexlet/pairs": "^1.1"
+        "hexlet/pairs": "^2.0"
     },
     "autoload": {
         "files": [
