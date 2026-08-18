@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/hexlet-components/php-pairs-data/compare/v2.0.0...v2.0.1) (2026-08-18)
+
+
+### Bug Fixes
+
+* **deps:** требовать hexlet/pairs мажора 2 ([#7](https://github.com/hexlet-components/php-pairs-data/issues/7)) ([d05abf4](https://github.com/hexlet-components/php-pairs-data/commit/d05abf4c174cdbef3e5cc7a3f2913cfcae8aa997))
+
 ## [2.0.0](https://github.com/hexlet-components/php-pairs-data/compare/v1.1.0...v2.0.0) (2026-08-18)
 
 
