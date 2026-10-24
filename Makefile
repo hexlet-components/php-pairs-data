@@ -5,7 +5,8 @@ test:
 	composer exec phpunit -- tests
 
 lint:
-	composer exec phpcs -- src tests --colors --standard=PSR12
+	mago lint
+	mago fmt --check
 
 lint-fix:
-	composer exec phpcbf -- src tests --colors --standard=PSR12
+	mago lint --fix --format-after-fix

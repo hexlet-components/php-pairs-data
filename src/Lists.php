@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Php\Pairs\Data\Lists;
 
 use Closure;
 
-use function Php\Pairs\Pairs\cons as pairsCons;
 use function Php\Pairs\Pairs\car;
 use function Php\Pairs\Pairs\cdr;
-use function Php\Pairs\Pairs\toString as pairToString;
+use function Php\Pairs\Pairs\cons as pairsCons;
 use function Php\Pairs\Pairs\isPair;
+use function Php\Pairs\Pairs\toString as pairToString;
 
 /**
  * Check if argument is list
@@ -197,7 +199,7 @@ function filter(mixed $list, Closure $func): ?Closure
 function s(...$elements): ?Closure
 {
     $reversed = array_reverse($elements);
-    return array_reduce($reversed, fn($acc, $item) => (has($acc, $item) ? $acc : conj($acc, $item)), l());
+    return array_reduce($reversed, fn($acc, $item) => has($acc, $item) ? $acc : conj($acc, $item), l());
 }
 
 /**
@@ -222,7 +224,6 @@ function disj($list, $element): ?Closure
 {
     return filter($list, fn($e) => $e !== $element);
 }
-
 
 /**
  * Applies Closure function $func to list $list
@@ -324,7 +325,6 @@ function random(mixed $list): mixed
 
     return get($n, $list);
 }
-
 
 /**
  * Converts given list to string
